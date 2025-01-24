@@ -8,8 +8,10 @@ it's a godsend depending on hardware but to small you could end up with much les
 https://github.com/ollama/ollama
 
 **Pull ollama3.2-vision at command prompt:**
+   ```sh
 ollama pull ollama3.2-vision
 ollama run ollama3.2-vision
+   ```
 
 1. **Create a virtual environment:**
    ```sh
@@ -36,7 +38,5 @@ ollama run ollama3.2-vision
 
 4. **Run the script:**
    ```sh
-   python python_ollama3.2-vision_call
+   python python_ollama3.2-vision_call.py
    ```
-
-This will create an isolated environment where you can install and manage packages without interfering with the system Python environment.
