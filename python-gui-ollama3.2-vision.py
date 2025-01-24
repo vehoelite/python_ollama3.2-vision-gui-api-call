@@ -2,15 +2,24 @@ import requests
 import base64
 import tkinter as tk
 from tkinter import filedialog, messagebox
+from PIL import Image
 import json
+import io
 
 def browse_image():
     file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg *.jpeg *.png")])
     if file_path:
         try:
-            # Read the image file and encode it in base64
-            with open(file_path, "rb") as image_file:
-                encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+            # Display a "Please wait..." message
+            status_label.config(text="Please wait, processing the image...")
+            root.update_idletasks()
+
+            # Open the image and resize it
+            with Image.open(file_path) as img:
+                img = img.resize((400, 400))  # Resize to 400x400 or any desired size
+                buffered = io.BytesIO()
+                img.save(buffered, format=format_var.get())  # Use selected format
+                encoded_image = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
             # Prepare the payload
             payload = {
@@ -34,9 +43,9 @@ def browse_image():
                 try:
                     res_json = json.loads(res)
                     combined_response += res_json['message']['content']
-                except json.JSONDecodeError as e:
+                except json.JSONDecodeError:
                     pass
-                except KeyError as e:
+                except KeyError:
                     pass
 
             # Display the combined response
@@ -44,6 +53,9 @@ def browse_image():
 
         except Exception as e:
             messagebox.showerror("Error", str(e))
+        finally:
+            # Clear the status message
+            status_label.config(text="")
 
 def display_response(response):
     response_window = tk.Toplevel(root)
@@ -54,6 +66,17 @@ def display_response(response):
 # Create the main window
 root = tk.Tk()
 root.title("Image Analyzer")
+
+# Create a dropdown menu for selecting the image format
+format_var = tk.StringVar(value="PNG")
+format_label = tk.Label(root, text="Select Image Format:")
+format_label.pack(pady=5)
+format_menu = tk.OptionMenu(root, format_var, "PNG", "JPEG", "BMP", "GIF")
+format_menu.pack(pady=5)
+
+# Create a status label
+status_label = tk.Label(root, text="")
+status_label.pack(pady=5)
 
 # Create a browse button
 browse_button = tk.Button(root, text="Browse Image", command=browse_image)
