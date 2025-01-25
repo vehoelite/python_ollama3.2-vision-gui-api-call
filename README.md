@@ -7,10 +7,10 @@ it's a godsend depending on hardware but to small you could end up with much les
 **Setup LLM**
 https://github.com/ollama/ollama
 
-**Pull ollama3.2-vision at command prompt:**
+**Pull llama3.2-vision at command prompt:**
    ```sh
-ollama pull ollama3.2-vision
-ollama run ollama3.2-vision
+ollama pull llama3.2-vision
+ollama run llama3.2-vision
    ```
 
 1. **Create a virtual environment:**
